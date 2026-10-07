@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="pl">
 <head>
 <meta charset="utf-8">
@@ -139,8 +139,7 @@ for(const[x,z]of[[-8,-14],[12,10],[-24,6],[4,22]]){const g=new THREE.Group();g.p
 const fl=new THREE.PointLight(0xff9a40,1.4,12);sc.add(fl);
 for(const[x,z]of[[-6,16],[22,-10],[-26,-8],[8,-18]])for(let i=0;i<4;i++)mkRock(x+(Math.random()-.5)*4,z+(Math.random()-.5)*4,1.3+Math.random());
 pop(4,rad()-1,130+P.lv.isl*45,34+P.lv.isl*12);
-const okp=(x,z)=>Math.hypot(x,z)<rad()-2&&!(x>6.5&&x<13.5&&z>-9.5&&z<-2.5)&&circ.every(k=>Math.hypot(x-k[0],z-k[1])>k[2]+.8);
-const bgG=new THREE.PlaneGeometry(1.06,.16),fgG=new THREE.PlaneGeometry(1,.1);fgG.translate(.5,0,0);
+const okp=(x,z)=>Math.hypot(x,z)<rad()-2&&!(x>6.5&&x<13.5&&z>-9.5&&z<-2.5)&&circ.every(k=>Math.hypot(x-k[0],z-k[1])>k[2]+.8); bgG=new THREE.PlaneGeometry(1.06,.16),fgG=new THREE.PlaneGeometry(1,.1);fgG.translate(.5,0,0);
 function bar(){const g=new THREE.Group(),o={depthTest:false,transparent:true,fog:false},b=new THREE.Mesh(bgG,new THREE.MeshBasicMaterial(Object.assign({color:0x1a1a1a},o))),f=new THREE.Mesh(fgG,new THREE.MeshBasicMaterial(Object.assign({color:0xff2a2a},o)));f.position.set(-.5,0,.001);b.renderOrder=10;f.renderOrder=11;g.add(b,f);g.userData.f=f;g.scale.setScalar(.9);sc.add(g);return g}
 function part(g,geo,m,x,y,z){const q=new THREE.Mesh(geo,m);q.position.set(x,y,z);q.castShadow=true;g.add(q);return q}
 function mkDeer(){const g=new THREE.Group(),B=(a,b,c)=>new THREE.BoxGeometry(a,b,c);
@@ -341,12 +340,4 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;hr=(hr+dt/15)
   h.ph+=dt*(mv?9:0);h.cd-=dt;const at=best&&d<=st;
   if(at){h.sw+=dt*8;if(h.cd<=0){h.cd=1.1;dmg(best,2+P.lv.pow*.5)}}else h.sw=0;
   h.arm.rotation.x=at?-Math.abs(Math.sin(h.sw))*1.4:Math.sin(h.ph)*.5;h.m.position.set(h.x,Math.abs(Math.sin(h.ph))*.06,h.z)}
- if(hp<mhp()&&now-lastD>8000)hp=Math.min(mhp(),hp+dt*1.5);hpUI();
- uT.value=now*.001;T.wave.offset.set(now*.00002,now*.000013);
- for(const q of clouds){q.position.x+=dt*2;if(q.position.x>260)q.position.x=-260}
- for(const q of smk){q.position.y+=dt*.9;q.position.x+=dt*.35;q.scale.x+=dt*.5;q.scale.y=q.scale.x*.5;if(q.position.y>9.5){q.position.set(11.55,5.4,-7.55);q.scale.set(.6,.3,1)}}
- sky();R.render(sc,cam);requestAnimationFrame(loop)}
-requestAnimationFrame(loop);
-</script>
-</body>
-</html>
+ if(hp<mhp()&&now-lastD>8000)hp=Math.min(mhp(),hp+dt*1.5
