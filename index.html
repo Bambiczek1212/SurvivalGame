@@ -53,7 +53,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
 <button class="btn green" id="plant">Sadź<small>3 drewna</small></button>
 <button class="btn" id="swap">Zmień narzędzie</button>
 <button class="btn red" id="hit">KOP</button>
-<button class="btn blue" id="take">Weź maczetę</button><button class="btn green" id="tame" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom,0px));display:none;font-size:20px;padding:14px 28px">Oswój</button>
+<button class="btn blue" id="take">Weź maczetę</button><button class="btn green" id="tame" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom,0px));display:none;font-size:20px;padding:14px 28px">Oswój</button><button class="btn green" id="carb" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(160px + env(safe-area-inset-bottom,0px));display:none;font-size:20px;padding:14px 28px">Wsiądź</button>
 <div id="evb"></div><div id="feed"></div><div id="flash"></div><div id="toast"></div>
 <div id="shop"><div id="panel"></div></div>
 <div id="intro"><h1>Leśny Kopacz</h1><p>Rąb drzewa, kop kamienie, sadź las i ulepszaj wyspę. W chacie czeka maczeta, a w lesie żyją zwierzęta.</p><p>Lewy kciuk: ruch. Prawy: rozglądanie.</p><p>Komputer: WSAD ruch, mysz rozglądanie (kliknij w grę), LPM kop, PPM ekwipunek.</p><button class="btn red" id="go">GRAJ SOLO</button><button class="btn blue" id="mp" style="margin-left:10px">MULTIPLAYER</button><p id="mpst" style="min-height:22px"></p><div id="mpp" style="display:none;margin-top:6px"><button class="btn green" id="mhost" style="font-size:15px;padding:10px 16px">STWÓRZ POKÓJ</button> <input id="mcode" maxlength="5" placeholder="KOD" style="width:90px;padding:10px;font:800 18px Rubik,sans-serif;text-transform:uppercase;text-align:center;border-radius:12px;border:3px solid #7a4200"> <button class="btn blue" id="mjoin" style="font-size:15px;padding:10px 16px">DOŁĄCZ</button><br><button class="btn" id="mauto" style="font-size:13px;padding:6px 12px;margin-top:8px">Szukaj automatycznie</button></div><div id="ver" style="position:absolute;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));text-align:left;max-width:46vw"><small id="vt" style="display:block;margin-bottom:6px;font:500 12px Rubik,sans-serif"></small><button class="btn" id="vo" style="padding:8px 14px;font-size:14px">Wersja stara</button> <button class="btn" id="vn" style="padding:8px 14px;font-size:14px">Wersja nowa</button></div></div>
@@ -61,7 +61,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
 <script>
 let rsd=null;const _mr=Math.random;Math.random=()=>rsd?rsd():_mr();function mb32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function hs(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
-const net={on:false,r:null,lob:null,me:'',peers:[],av:{},t:0,quiet:false};let nid=1,fid=null,VN=true;try{VN=localStorage.getItem('lasv')!=='old'}catch(_){}const NEWK=['cave','arrow2','heart','steel','plate'];function newId(){return(net.on&&!net.quiet)?net.me+':'+nid++:nid++}
+const net={on:false,r:null,lob:null,me:'',peers:[],av:{},t:0,quiet:false};let nid=1,fid=null,VN=true;try{VN=localStorage.getItem('lasv')!=='old'}catch(_){}const NEWK=['cave','arrow2','heart','steel','plate','gun','ammo','car'];function newId(){return(net.on&&!net.quiet)?net.me+':'+nid++:nid++}
 const $=id=>document.getElementById(id);
 const c=$('c'),R=new THREE.WebGLRenderer({canvas:c,antialias:true,powerPreference:'high-performance'});
 R.setPixelRatio(Math.min(devicePixelRatio||1,2.5));R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.35;
@@ -91,7 +91,7 @@ const MS=o=>new THREE.MeshStandardMaterial(Object.assign({roughness:.95,metalnes
 const M={bark:MS({map:T.bark,bumpMap:T.bark,bumpScale:2.5}),l1:MS({map:T.leaf,bumpMap:T.leaf,bumpScale:1.5}),l2:MS({map:T.leaf,bumpMap:T.leaf,bumpScale:1.5,color:0xe6ffd8}),l3:MS({map:T.leaf,bumpMap:T.leaf,bumpScale:1.5,color:0xc6e8a8}),oak:MS({map:T.leaf,bumpMap:T.leaf,bumpScale:1.5,color:0xd8f090}),rock:MS({map:T.rock,bumpMap:T.rock,bumpScale:3}),plank:MS({map:T.plank,bumpMap:T.plank,bumpScale:1.5}),roof:MS({map:T.roof,bumpMap:T.roof,bumpScale:2.5,side:THREE.DoubleSide}),steel:MS({color:0xd0d8e2,metalness:.8,roughness:.25}),dark:MS({color:0x3a2412}),fur:MS({map:T.fur,bumpMap:T.fur,bumpScale:1}),fur2:MS({map:T.fur,color:0xd8d0c8}),bone:MS({color:0xe8dcc0}),white:MS({color:0xffffff}),cloth:MS({color:0xc9b79c}),water:new THREE.MeshStandardMaterial({color:0x2a8fc0,roughness:.05,metalness:.25,transparent:true,opacity:.86,bumpMap:T.wave,bumpScale:.8}),sand:MS({map:T.dirt,color:0xe8d8a0}),flame:new THREE.MeshBasicMaterial({color:0xff9a20})};
 const isl=new THREE.Mesh(new THREE.CylinderGeometry(1,1,2,64),[MS({map:T.dirt,flatShading:false}),MS({map:T.grass,bumpMap:T.grass,bumpScale:2}),MS({map:T.dirt})]);isl.position.y=-1;isl.receiveShadow=true;sc.add(isl);
 const sea=new THREE.Mesh(new THREE.PlaneGeometry(500,500),new THREE.MeshBasicMaterial({color:0x3fb6f0}));sea.rotation.x=-Math.PI/2;sea.position.y=-.8;sc.add(sea);
-let P={wood:0,stone:0,meat:0,hide:0,berry:0,iron:0,cave:false,heart:0,pets:[],arrow:0,sword:false,bow:false,helpers:0,mach:false,lv:{pow:0,reach:0,spd:0,yld:0,gro:0,crit:0,hp:0,arm:0,steel:0,plate:0,isl:0}};
+let P={wood:0,stone:0,meat:0,hide:0,berry:0,iron:0,cave:false,heart:0,pets:[],gun:false,ammo:0,car:false,arrow:0,sword:false,bow:false,helpers:0,mach:false,lv:{pow:0,reach:0,spd:0,yld:0,gro:0,crit:0,hp:0,arm:0,steel:0,plate:0,isl:0}};
 try{const d=JSON.parse(localStorage.getItem('las3'));if(d&&d.lv)P=Object.assign(P,d,{lv:Object.assign(P.lv,d.lv)})}catch(_){}
 const U={pow:['Kilof','Mocniejsze uderzenia',8,'wood'],reach:['Zasięg','Dosięgasz dalej',10,'stone'],spd:['Buty','Szybszy bieg',12,'wood'],yld:['Perk: Podwójny zbiór','Więcej surowców',20,'stone'],gro:['Perk: Szybki wzrost','Sadzonki rosną szybciej',15,'wood'],crit:['Perk: Krytyk','Szansa na podwójny cios',15,'wood'],steel:['Stalowe ostrze','Dużo mocniejsze uderzenia (płacisz żelazem)',6,'iron'],plate:['Stalowy pancerz','Mocniejsza ochrona (płacisz żelazem)',8,'iron'],hp:['Max zdrowie','+20 punktów zdrowia',12,'wood'],arm:['Zbroja','Mniejsze obrażenia od zwierząt',14,'stone'],isl:['Większa wyspa','Więcej miejsca na las',25,'stone']};
 const rad=()=>40+P.lv.isl*7,cost=k=>Math.round(U[k][2]*Math.pow(1.6,P.lv[k])),mx=k=>k==='isl'?5:10;
@@ -191,15 +191,17 @@ function mkMach(){const g=new THREE.Group(),a=(geo,m,x,y)=>{const q=new THREE.Me
 function mkSword(){const g=new THREE.Group(),a=(geo,m,x,y)=>{const q=new THREE.Mesh(geo,m);q.position.set(x,y,0);g.add(q);return q};
  a(new THREE.BoxGeometry(.08,.95,.015),M.steel,0,.6);a(new THREE.ConeGeometry(.04,.12,4),M.steel,0,1.12).scale.z=.3;a(new THREE.BoxGeometry(.3,.05,.06),M.dark,0,.1);a(new THREE.CylinderGeometry(.028,.03,.28,8),M.bark,0,-.06);a(new THREE.SphereGeometry(.05,8,6),M.steel,0,-.22);return g}
 function mkBow(){const g=new THREE.Group(),b=new THREE.Mesh(new THREE.TorusGeometry(.45,.025,6,24,Math.PI),M.bark);b.rotation.z=-Math.PI/2;g.add(b);g.add(new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,.9,4),M.white));g.rotation.y=Math.PI/2;const w=new THREE.Group();w.add(g);return w}
+function mkGun(){const g=new THREE.Group(),a=(geo,m,x,y,z,rx)=>{const q=new THREE.Mesh(geo,m);q.position.set(x,y,z);if(rx)q.rotation.x=rx;g.add(q);return q};
+ a(new THREE.BoxGeometry(.07,.1,.4),M.steel,0,0,-.05);a(new THREE.BoxGeometry(.05,.06,.1),M.dark,0,.01,-.3);a(new THREE.BoxGeometry(.06,.2,.09),M.dark,0,-.14,.08,.25);a(new THREE.BoxGeometry(.02,.06,.1),M.dark,0,-.07,-.02);a(new THREE.BoxGeometry(.015,.03,.02),M.dark,0,.07,-.22);return g}
 const rbM=[];const rm=()=>{const m=new THREE.MeshStandardMaterial({roughness:.3,metalness:.4});rbM.push(m);return m};
 function mkRainbow(){const g=new THREE.Group();for(let i=0;i<7;i++){const q=new THREE.Mesh(new THREE.CylinderGeometry(.04,.045,.25,10),rm());q.position.y=-.8+i*.25;g.add(q)}
  for(const s of[-1,1])for(let i=0;i<5;i++){const q=new THREE.Mesh(new THREE.BoxGeometry(.2,.09,.09),rm());q.position.set(s*(.15+i*.17),.98-i*i*.035,0);q.rotation.z=-s*(.1+i*.12);g.add(q)}
  const hd=new THREE.Mesh(new THREE.BoxGeometry(.16,.16,.16),rm());hd.position.y=.98;g.add(hd);return g}
-const tg=new THREE.Group(),pk=mkPick(),mh=mkMach(),sw_=mkSword(),bw_=mkBow(),rb_=mkRainbow();mh.visible=sw_.visible=bw_.visible=rb_.visible=false;tg.add(pk,mh,sw_,bw_,rb_);cam.add(tg);
+const tg=new THREE.Group(),pk=mkPick(),mh=mkMach(),sw_=mkSword(),bw_=mkBow(),rb_=mkRainbow(),gn_=mkGun();mh.visible=sw_.visible=bw_.visible=rb_.visible=gn_.visible=false;tg.add(pk,mh,sw_,bw_,rb_,gn_);cam.add(tg);
 const lying=mkMach();lying.position.set(11.55,.93,-6);lying.rotation.x=Math.PI/2;lying.traverse(o=>o.castShadow=true);sc.add(lying);lying.visible=!P.mach;
 let tl='pick';
-function setTool(t){tl=t;pk.visible=t==='pick';mh.visible=t==='mach';sw_.visible=t==='sword';bw_.visible=t==='bow';rb_.visible=t==='rainbow';$('hit').textContent={pick:'KOP',mach:'TNIJ',sword:'CIĘCIE',bow:'STRZAŁ',rainbow:'KOP'}[t]}
-if(P.mach||P.sword||P.bow)$('swap').style.display='block';
+function setTool(t){tl=t;pk.visible=t==='pick';mh.visible=t==='mach';sw_.visible=t==='sword';bw_.visible=t==='bow';rb_.visible=t==='rainbow';gn_.visible=t==='gun';$('hit').textContent={pick:'KOP',mach:'TNIJ',sword:'CIĘCIE',bow:'STRZAŁ',rainbow:'KOP',gun:'STRZEL'}[t]}
+if(P.mach||P.sword||P.bow||P.gun)$('swap').style.display='block';
 let ac;function beep(f,l,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),v=ac.createGain();o.frequency.value=f;o.type=t||'triangle';v.gain.value=.1;v.gain.exponentialRampToValueAtTime(.001,ac.currentTime+l);o.connect(v);v.connect(ac.destination);o.start();o.stop(ac.currentTime+l)}catch(_){}}
 let tt;function toast(s){const t=$('toast');t.textContent=s;t.style.opacity=1;clearTimeout(tt);tt=setTimeout(()=>t.style.opacity=0,1000)}
 function hud(){$('ir').textContent=Math.floor(P.iron);$('w').textContent=Math.floor(P.wood);$('s').textContent=Math.floor(P.stone)}
@@ -209,7 +211,8 @@ const pa=[],PG=new THREE.BoxGeometry(.12,.12,.12);
 function burst(x,y,z,cl){for(let i=0;i<8;i++){const m=new THREE.Mesh(PG,new THREE.MeshBasicMaterial({color:cl}));m.position.set(x,y,z);sc.add(m);pa.push({m,vx:(Math.random()-.5)*3,vy:Math.random()*3+1,vz:(Math.random()-.5)*3,l:.6})}}
 let py=0,tY=-.9,tP=0,sjx=0,sjy=0,yaw=-.9,pitch=0,jx=0,jy=0,sw=-1,hitDone=true,holding=false,bob=0,hr=9;
 function target(){const reach=2.6+P.lv.reach*.35,fx=-Math.sin(yaw),fz=-Math.cos(yaw);let best=null,bd=1e9;for(const e of ents.concat(ans)){if(e.tamed)continue;if(e.t==='tree'&&e.g<1)continue;const dx=e.x-cam.position.x,dz=e.z-cam.position.z,d=Math.hypot(dx,dz);if(d<reach+e.r&&(dx*fx+dz*fz)/d>.8&&d<bd){bd=d;best=e}}return best}
-function doHit(){
+function doHit(){if(inCar)return;
+ if(tl==='gun'){if(P.ammo<1){toast('Brak amunicji');return}P.ammo--;fireGun();hud();save();return}
  if(tl==='bow'){if(P.arrow<1){toast('Brak strzał');return}P.arrow--;shoot();hud();save();return}
  const e=target();if(!e){beep(150,.08);return}
  if(e.t==='bush'){harvest(e);return}
@@ -222,9 +225,9 @@ $('plant').onclick=()=>{if(P.wood<3){toast('Potrzebujesz 3 drewna');return}
  if(Math.hypot(x,z)>rad()-1||Math.hypot(x-HX,z-HZ)<5.5||ents.some(e=>Math.hypot(e.x-x,e.z-z)<1.4)){toast('Brak miejsca');return}
  P.wood-=3;mkTree(x,z,.2);if(net.on){const e=ents[ents.length-1];net.r.emit('spawn',{k:'tree',x:e.x,z:e.z,id:e.id,g:.2}).catch(()=>{})}beep(500,.1);toast('Posadzono drzewo');prog('plant');hud();save()};
 $('take').onclick=()=>{P.mach=true;lying.visible=false;$('swap').style.display='block';if(EV.cur!=='rain')setTool('mach');toast('Zdobyto maczetę');beep(800,.2);save()};
-$('swap').onclick=()=>{if(EV.cur==='rain'){toast('Podczas eventu masz Tęczowy Kilof!');return}const o=['pick',P.mach&&'mach',P.sword&&'sword',P.bow&&'bow'].filter(Boolean);setTool(o[(o.indexOf(tl)+1)%o.length])};
+$('swap').onclick=()=>{if(EV.cur==='rain'){toast('Podczas eventu masz Tęczowy Kilof!');return}const o=['pick',P.mach&&'mach',P.sword&&'sword',P.bow&&'bow',P.gun&&'gun'].filter(Boolean);setTool(o[(o.indexOf(tl)+1)%o.length])};
 function INV(){const it=(n,v)=>`<div class="slot"><b>${v}</b>${n}</div>`,tool=(k,n,own)=>`<div class="slot" data-e="${k}"><b>${n}</b>${own?(tl===k?'Wybrane':'Wybierz'):'Brak'}</div>`;
- return '<div class="grid">'+it('Drewno',Math.floor(P.wood))+it('Kamień',Math.floor(P.stone))+it('Mięso',P.meat)+it('Skóra',P.hide)+it('Maliny',P.berry)+it('Strzały',P.arrow)+(VN?it('Żelazo',Math.floor(P.iron))+it('Serce',P.heart):'')+tool('pick','Kilof',1)+tool('mach','Maczeta',P.mach)+tool('sword','Miecz',P.sword)+tool('bow','Łuk',P.bow)+'</div>'+
+ return '<div class="grid">'+it('Drewno',Math.floor(P.wood))+it('Kamień',Math.floor(P.stone))+it('Mięso',P.meat)+it('Skóra',P.hide)+it('Maliny',P.berry)+it('Strzały',P.arrow)+(VN?it('Żelazo',Math.floor(P.iron))+it('Serce',P.heart):'')+tool('pick','Kilof',1)+tool('mach','Maczeta',P.mach)+tool('sword','Miecz',P.sword)+tool('bow','Łuk',P.bow)+tool('gun','Pistolet',P.gun)+it('Amunicja',P.ammo)+'</div>'+
  `<div class="row"><div><b>Zjedz malinę</b><br><em>+12 zdrowia</em></div><button class="btn buy" data-h="1" ${P.berry&&hp<mhp()?'':'disabled'}>Zjedz</button></div><div class="row"><div><b>Sprzedaj mięso</b><br><em>1 szt. = 2 drewna</em></div><button class="btn buy" data-s="meat" ${P.meat?'':'disabled'}>Sprzedaj</button></div><div class="row"><div><b>Sprzedaj skórę</b><br><em>1 szt. = 3 kamienie</em></div><button class="btn buy" data-s="hide" ${P.hide?'':'disabled'}>Sprzedaj</button></div>`}
 let tab='shop';
 function render(){let h=`<div class="tabs"><button class="btn tab ${tab==='shop'?'on':''}" data-t="shop">Ulepszenia</button><button class="btn tab ${tab==='items'?'on':''}" data-t="items">Przedmioty</button><button class="btn tab ${tab==='q'?'on':''}" data-t="q">Zadania</button><button class="btn tab ${tab==='inv'?'on':''}" data-t="inv">Ekwipunek</button><button class="btn tab ${tab==='ev'?'on':''}" data-t="ev">Eventy</button></div>`;
@@ -234,7 +237,7 @@ function render(){let h=`<div class="tabs"><button class="btn tab ${tab==='shop'
 $('panel').onclick=e=>{const t=e.target.closest('button,[data-e]');if(!t||t.disabled)return;
  if(t.id==='close'){$('shop').classList.remove('on');return}
  if(t.dataset.t){tab=t.dataset.t;render();return}
- if(t.dataset.e){if(EV.cur==='rain'){toast('Podczas eventu masz Tęczowy Kilof!');return}const o={pick:1,mach:P.mach,sword:P.sword,bow:P.bow};if(o[t.dataset.e]){setTool(t.dataset.e);render()}return}if(t.dataset.h){if(P.berry>0&&hp<mhp()){P.berry--;heal(12);beep(600,.1);hud();save();render()}return}if(t.dataset.i){buyItem(t.dataset.i);return}if(t.dataset.s){const s=t.dataset.s;if(P[s]>0){P[s]--;if(s==='meat')P.wood+=2;else P.stone+=3;beep(600,.1);hud();save();render()}return}if(t.dataset.q){const q=Q.find(a=>a[0]===t.dataset.q);P.q.got[q[0]]=1;P[q[3]]+=q[4];beep(800,.2);toast('+'+q[4]);hud();save();render();return}
+ if(t.dataset.e){if(EV.cur==='rain'){toast('Podczas eventu masz Tęczowy Kilof!');return}const o={pick:1,mach:P.mach,sword:P.sword,bow:P.bow,gun:P.gun};if(o[t.dataset.e]){setTool(t.dataset.e);render()}return}if(t.dataset.h){if(P.berry>0&&hp<mhp()){P.berry--;heal(12);beep(600,.1);hud();save();render()}return}if(t.dataset.i){buyItem(t.dataset.i);return}if(t.dataset.s){const s=t.dataset.s;if(P[s]>0){P[s]--;if(s==='meat')P.wood+=2;else P.stone+=3;beep(600,.1);hud();save();render()}return}if(t.dataset.q){const q=Q.find(a=>a[0]===t.dataset.q);P.q.got[q[0]]=1;P[q[3]]+=q[4];beep(800,.2);toast('+'+q[4]);hud();save();render();return}
  const k=t.dataset.k;P[U[k][3]]-=cost(k);P.lv[k]++;beep(700,.2);if(k==='isl'){const o=rad()-7;setIsl();pop(o-1,rad()-1,40,12);grass(o-.5,rad()-.5,Math.floor((rad()*rad()-o*o)*5));toast('Wyspa urosła!')}hud();save();render()};
 $('shopb').onclick=()=>{tab='shop';render();$('shop').classList.add('on')};$('invb').onclick=()=>{tab='inv';render();$('shop').classList.add('on')};$('qb').onclick=()=>{tab='q';render();$('shop').classList.add('on')};
 $('go').onclick=()=>{if(net.lob&&!net.on)net.lob.presence({mm:null}).catch(()=>{});$('intro').style.display='none';beep(500,.1);try{screen.orientation.lock('landscape').catch(()=>{})}catch(_){}};
@@ -252,7 +255,7 @@ const up=e=>{if(joy===e.pointerId){joy=-1;jx=jy=0;kn.style.transform='';home()}d
 c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);
 const cD=new THREE.Color(0x8fd3ff),cN=new THREE.Color(0x070b22),cO=new THREE.Color(0xff8a50),sD=new THREE.Color(0x3fb6f0),sN=new THREE.Color(0x0a2a55),skc=new THREE.Color();
 const hz=new THREE.Color(),tp=new THREE.Color(),cTD=new THREE.Color(0x2f7fe0),cTN=new THREE.Color(0x02030c),cHD=new THREE.Color(0xbfe0ff),cHN=new THREE.Color(0x0a1230),sC=new THREE.Color(),wh=new THREE.Color(0xffffff),moonC=new THREE.Color(0x7f98ff);
-function sky(){const a=(hr-6)/12*Math.PI,sy=Math.sin(a),day=Math.max(0,Math.min(1,sy*3+.4)),k=Math.max(0,1-Math.abs(sy-.03)/.28),e=Math.min(1,Math.max(0,sy*3));
+function sky(){DAYF=Math.max(0,Math.min(1,Math.sin((hr-6)/12*Math.PI)*3+.4));const a=(hr-6)/12*Math.PI,sy=Math.sin(a),day=Math.max(0,Math.min(1,sy*3+.4)),k=Math.max(0,1-Math.abs(sy-.03)/.28),e=Math.min(1,Math.max(0,sy*3));
  const sd=skyU.sunDir.value.set(Math.cos(a),sy,.25).normalize();
  sun.position.set(cam.position.x+sd.x*60,Math.max(sd.y,.14)*60,cam.position.z+sd.z*60);sun.target.position.copy(cam.position);
  sC.setRGB(1,.6+.4*e,.35+.55*e);sun.color.copy(day>.05?sC:moonC);sun.intensity=.2+day*2.6;
@@ -282,13 +285,13 @@ function mkHelper(){const g=new THREE.Group(),B=(a,b,c)=>new THREE.BoxGeometry(a
  part(g,B(.46,.62,.26),HM,0,1.15,0);part(g,new THREE.SphereGeometry(.19,14,10),HM,0,1.68,0);part(g,B(.4,.14,.24),HM,0,.8,0);part(g,B(.14,.7,.14),HM,-.12,.4,0);part(g,B(.14,.7,.14),HM,.12,.4,0);part(g,B(.12,.6,.12),HM,-.32,1.1,0);
  const arm=new THREE.Group();arm.position.set(.32,1.4,0);part(arm,B(.12,.6,.12),HM,0,-.28,0);const pp=mkPick();pp.scale.setScalar(.8);pp.position.set(0,-.6,.1);pp.rotation.x=-1.2;arm.add(pp);g.add(arm);
  sc.add(g);g.position.set(cam.position.x+1.5,0,cam.position.z+1.5);hel.push({m:g,x:g.position.x,z:g.position.z,cd:0,sw:0,ph:0,arm})}
-const IT={sword:['Miecz','Kupowany raz. Duże obrażenia zwierzętom',25,'stone',1],bow:['Łuk','Strzelasz z dystansu (potrzebne strzały)',30,'wood',1],arrow:['10 strzał','Amunicja do łuku',6,'wood'],garden:['Ogród malin','5 krzaków z malinami, które leczą',15,'wood'],helper:['Pomocnik: manekin','Rąbie drzewa i walczy ze zwierzętami (maks. 3)',40,'wood'],medkit:['Apteczka','Leczy do pełna',10,'stone'],cave:['Jaskinia (kopalnia żelaza)','Kupowana raz. W środku kopiesz rudę żelaza',75,'stone',1],arrow2:['20 stalowych strzał','Amunicja do łuku za żelazo',8,'iron'],heart:['Serce oswajania','Oswaja jedno zwierzę, żeby Cię nie atakowało (maks. 1 w ekwipunku)',20,'wood',1]};
-function ITEMS(){let h='';for(const k in IT){if(!VN&&NEWK.includes(k))continue;const q=IT[k],once=q[4]&&P[k],cs=k==='helper'?q[2]+P.helpers*25:q[2],ok=P[q[3]]>=cs&&!once&&!(k==='helper'&&P.helpers>=3);h+=`<div class="row"><div><b>${q[0]}</b>${k==='helper'?' <em>('+P.helpers+'/3)</em>':''}<br><em>${q[1]}</em></div><button class="btn buy" data-i="${k}" ${ok?'':'disabled'}>${once?(k==='heart'?'Masz serce':'Kupiono'):cs+' '+rn(q[3])}</button></div>`}return h}
-function buyItem(k){const q=IT[k],cs=k==='helper'?q[2]+P.helpers*25:q[2];if(P[q[3]]<cs)return;
+const IT={sword:['Miecz','Kupowany raz. Duże obrażenia zwierzętom',25,'stone',1],bow:['Łuk','Strzelasz z dystansu (potrzebne strzały)',30,'wood',1],arrow:['10 strzał','Amunicja do łuku',6,'wood'],garden:['Ogród malin','5 krzaków z malinami, które leczą',15,'wood'],helper:['Pomocnik: manekin','Rąbie drzewa i walczy ze zwierzętami (maks. 3)',40,'wood'],medkit:['Apteczka','Leczy do pełna',10,'stone'],cave:['Jaskinia (kopalnia żelaza)','Kupowana raz. W środku kopiesz rudę żelaza',75,'stone',1],arrow2:['20 stalowych strzał','Amunicja do łuku za żelazo',8,'iron'],heart:['Serce oswajania','Oswaja jedno zwierzę, żeby Cię nie atakowało (maks. 1 w ekwipunku)',20,'wood',1],gun:['Pistolet','Kupowany raz. W zestawie 100 sztuk amunicji',125,'wood',1],ammo:['50 sztuk amunicji','Do pistoletu',30,'wood'],car:['Auto myśliwskie','Otwarte terenowe auto z reflektorami. Kupowane raz.',260,'wood',1,{stone:20,iron:2}]};
+function ITEMS(){let h='';for(const k in IT){if(!VN&&NEWK.includes(k))continue;const q=IT[k],once=q[4]&&P[k],cs=k==='helper'?q[2]+P.helpers*25:q[2],ok=P[q[3]]>=cs&&(!q[5]||Object.keys(q[5]).every(r=>P[r]>=q[5][r]))&&!once&&!(k==='helper'&&P.helpers>=3);h+=`<div class="row"><div><b>${q[0]}</b>${k==='helper'?' <em>('+P.helpers+'/3)</em>':''}<br><em>${q[1]}</em></div><button class="btn buy" data-i="${k}" ${ok?'':'disabled'}>${once?(k==='heart'?'Masz serce':'Kupiono'):cs+' '+rn(q[3])+(q[5]?Object.entries(q[5]).map(([r,v])=>' + '+v+' '+rn(r)).join(''):'')}</button></div>`}return h}
+function buyItem(k){const q=IT[k],cs=k==='helper'?q[2]+P.helpers*25:q[2];if(P[q[3]]<cs||(q[5]&&Object.keys(q[5]).some(r=>P[r]<q[5][r])))return;
  if(k==='garden'&&!garden())return;if(k==='medkit'&&hp>=mhp()){toast('Masz pełne zdrowie');return}
- P[q[3]]-=cs;beep(700,.2);
+ P[q[3]]-=cs;if(q[5])for(const r in q[5])P[r]-=q[5][r];beep(700,.2);
  if(k==='sword'||k==='bow'){P[k]=true;if(EV.cur!=='rain')setTool(k);$('swap').style.display='block';toast('Kupiono: '+q[0])}
- else if(k==='arrow'){P.arrow+=10;toast('+10 strzał')}else if(k==='heart'){P.heart=1;toast('Serce w ekwipunku. Podejdź do zwierzęcia i je oswój')}else if(k==='arrow2'){P.arrow+=20;toast('+20 strzał')}else if(k==='cave'){P.cave=true;buildCave();toast('Kupiono jaskinię! Wejdź do środka i kop żelazo')}
+ else if(k==='arrow'){P.arrow+=10;toast('+10 strzał')}else if(k==='gun'){P.gun=true;P.ammo+=100;if(EV.cur!=='rain')setTool('gun');$('swap').style.display='block';toast('Kupiono pistolet + 100 sztuk amunicji')}else if(k==='ammo'){P.ammo+=50;toast('+50 amunicji')}else if(k==='car'){P.car=true;placeJeep(true);toast('Auto stoi obok Ciebie. Podejdź i wsiądź (F)')}else if(k==='heart'){P.heart=1;toast('Serce w ekwipunku. Podejdź do zwierzęcia i je oswój')}else if(k==='arrow2'){P.arrow+=20;toast('+20 strzał')}else if(k==='cave'){P.cave=true;buildCave();toast('Kupiono jaskinię! Wejdź do środka i kop żelazo')}
  else if(k==='helper'){P.helpers++;mkHelper();toast('Manekin dołączył do Ciebie')}
  else if(k==='medkit'){hp=mhp();toast('Zdrowie odnowione')}
  else if(k==='garden')toast('Posadzono ogród malin');
@@ -359,6 +362,42 @@ $('evbtn').onclick=()=>{tab='ev';render();$('shop').classList.add('on');holding=
 function feed(t){const f=$('feed'),d=document.createElement('div');d.className='fd';d.textContent=t;f.appendChild(d);while(f.children.length>5)f.removeChild(f.firstChild);setTimeout(()=>{d.style.opacity=0;setTimeout(()=>d.remove(),600)},6000)}
 function mpMsg(txt){if(net.on&&net.r)net.r.emit('msg',{by:net.name||'Gracz',txt}).catch(()=>{})}
 const ACC={deer:'jelenia',rabbit:'królika',boar:'dzika',wolf:'wilka'};
+let jv=false,jc=false,inCar=false,DAYF=1;const car={x:0,z:0,h:0,v:0},jeep={m:null,spots:[],hm:null,w:[]},jcirc=[0,0,1.7];
+T.camo=ptex((u,v)=>{const n=fbm(u,v,5,5,4);return n>.58?[56,70,40]:n>.46?[92,104,62]:[70,84,50]},1,256);
+function mkJeep(){const g=new THREE.Group(),camo=MS({map:T.camo,roughness:.6}),metal=MS({color:0x2b2f2b,metalness:.7,roughness:.4}),tire=MS({color:0x141414,roughness:.95}),seat=MS({color:0x3b2d20}),B=(a,b,c,m,x,y,z)=>{const q=new THREE.Mesh(new THREE.BoxGeometry(a,b,c),m);q.position.set(x,y,z);q.castShadow=true;g.add(q);return q};
+ jeep.hm=MS({color:0xffffff,emissive:0xfff2c0,emissiveIntensity:.4});const tl_=MS({color:0x661111,emissive:0xff1111,emissiveIntensity:.5});
+ B(2,.5,4.2,camo,0,.8,0);B(1.8,.35,1.6,camo,0,1.15,1.3);for(const x of[-1.05,1.05])B(.35,.12,1.3,metal,x,1.0,1.4);
+ B(2,.12,.12,metal,0,.7,2.25);for(const x of[-.8,.8])B(.08,.4,.08,metal,x,.9,2.2);
+ for(const x of[-.85,.85])B(.06,.75,.06,metal,x,1.55,.55);B(1.8,.06,.06,metal,0,1.92,.55);
+ for(const x of[-.85,.85])B(.07,1.2,.07,metal,x,1.6,-.85);B(1.8,.07,.07,metal,0,2.2,-.85);
+ for(const x of[-.5,.5]){B(.5,.12,.5,seat,x,1.12,.1);B(.5,.6,.1,seat,x,1.45,-.2)}B(1.6,.12,.5,seat,0,1.12,-1.2);B(1.6,.6,.1,seat,0,1.45,-1.55);
+ B(.3,.25,.12,jeep.hm,-.7,1.05,2.12);B(.3,.25,.12,jeep.hm,.7,1.05,2.12);B(.25,.2,.1,tl_,-.8,.95,-2.12);B(.25,.2,.1,tl_,.8,.95,-2.12);
+ const sw=new THREE.Mesh(new THREE.TorusGeometry(.16,.025,8,16),metal);sw.position.set(.5,1.55,.55);sw.rotation.x=-.9;g.add(sw);
+ const spare=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,.3,18),tire);spare.rotation.x=Math.PI/2;spare.position.set(0,1.1,-2.3);spare.castShadow=true;g.add(spare);
+ const WG_=new THREE.CylinderGeometry(.5,.5,.35,18);WG_.rotateZ(Math.PI/2);for(const x of[-1.05,1.05])for(const z of[-1.35,1.35]){const w=new THREE.Mesh(WG_,tire);w.position.set(x,.5,z);w.castShadow=true;g.add(w);jeep.w.push(w)}
+ for(const x of[-.7,.7]){const sp=new THREE.SpotLight(0xfff2d0,0,70,.5,.5,1),t=new THREE.Object3D();sp.position.set(x,1.05,2.1);t.position.set(x*.5,.4,30);g.add(sp,t);sp.target=t;jeep.spots.push(sp)}
+ sc.add(g);return g}
+function placeJeep(fresh){if(!jeep.m){jeep.m=mkJeep();circ.push(jcirc)}
+ if(fresh){car.x=cam.position.x-Math.sin(yaw)*6;car.z=cam.position.z-Math.cos(yaw)*6;car.h=yaw+Math.PI}
+ else{let ok_=false;for(let r=7;r<14&&!ok_;r+=1.5)for(let a=0;a<6.28&&!ok_;a+=.5){const x=Math.cos(a)*r,z=Math.sin(a)*r;if(okp(x,z)&&ents.every(e=>Math.hypot(e.x-x,e.z-z)>3)){car.x=x;car.z=z;car.h=a;ok_=true}}}
+ jeep.m.position.set(car.x,0,car.z);jeep.m.rotation.y=car.h;jcirc[0]=car.x;jcirc[1]=car.z}
+function carStep(dt){const th=-sjy,st=sjx;
+ if(th>.05)car.v+=Math.min(1,th)*(car.v<0?14:7)*dt;else if(th<-.05)car.v-=Math.min(1,-th)*(car.v>.5?14:6)*dt;else car.v-=Math.sign(car.v)*Math.min(Math.abs(car.v),4*dt);
+ car.v=Math.max(-7,Math.min(22,car.v));car.h-=st*Math.min(1,Math.abs(car.v)/4)*1.7*Math.sign(car.v||1)*dt;
+ car.x+=Math.sin(car.h)*car.v*dt;car.z+=Math.cos(car.h)*car.v*dt;
+ for(const e of ents){const dx=car.x-e.x,dz=car.z-e.z,d=Math.hypot(dx,dz),m=e.r+1.5;if(d<m&&d>0){car.x=e.x+dx/d*m;car.z=e.z+dz/d*m;car.v*=.6}}
+ for(const k of circ){if(k===jcirc)continue;const dx=car.x-k[0],dz=car.z-k[1],d=Math.hypot(dx,dz),m=k[2]+1.5;if(d<m&&d>0){car.x=k[0]+dx/d*m;car.z=k[1]+dz/d*m;car.v*=.6}}
+ for(const w of walls){if(w[4])continue;const nx=Math.max(w[0],Math.min(car.x,w[1])),nz=Math.max(w[2],Math.min(car.z,w[3])),dx=car.x-nx,dz=car.z-nz,d=Math.hypot(dx,dz);if(d<1.5&&d>0){car.x=nx+dx/d*1.5;car.z=nz+dz/d*1.5;car.v*=.6}}
+ const d0=Math.hypot(car.x,car.z),mr=rad()-1.8;if(d0>mr){car.x*=mr/d0;car.z*=mr/d0;car.v*=.7}
+ for(const a of ans){if(a.tamed)continue;if(Math.hypot(a.x-car.x,a.z-car.z)<a.r+1.4&&Math.abs(car.v)>5&&(a.hitT||0)<performance.now()){a.hitT=performance.now()+500;dmg(a,5+Math.abs(car.v)*.35);car.v*=.85}}
+ jeep.m.position.set(car.x,0,car.z);jeep.m.rotation.y=car.h;jcirc[0]=car.x;jcirc[1]=car.z;jeep.w.forEach(w=>w.rotation.x+=car.v*dt/.5)}
+$('carb').onclick=()=>{if(inCar){inCar=false;car.v=0;tg.visible=true;cam.position.set(car.x+Math.cos(car.h)*2.4,1.6,car.z-Math.sin(car.h)*2.4);tY=yaw=car.h+Math.PI;holding=false}else{inCar=true;tg.visible=false;car.v=0;holding=false}};
+function fireGun(){const dir=new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion),o=cam.position.clone();let best=null,bt=80;
+ for(const a of ans){if(a.tamed)continue;const cy=a.H*.45,r=Math.max(a.r,.5)+.2,dx=a.x-o.x,dy=cy-o.y,dz=a.z-o.z,t=dx*dir.x+dy*dir.y+dz*dir.z;if(t<0||t>bt)continue;const qx=dx-dir.x*t,qy=dy-dir.y*t,qz=dz-dir.z*t;if(qx*qx+qy*qy+qz*qz<r*r){bt=t;best=a}}
+ const end=o.clone().addScaledVector(dir,best?bt:60),st=o.clone().addScaledVector(dir,.9);st.y-=.12;
+ const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([st,end]),new THREE.LineBasicMaterial({color:0xfff2a0}));sc.add(ln);setTimeout(()=>{sc.remove(ln);ln.geometry.dispose()},60);
+ beep(180,.12,'square',.2);beep(90,.2,'sawtooth',.12);if(best)dmg(best,6+P.lv.pow*1.5)}
+if(P.car&&VN)placeJeep(false);
 const PEER_URL='https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js',pm=new Map(),NLET='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function loadPeer(){return new Promise((res,rej)=>{if(window.Peer)return res();const q=document.createElement('script');q.src=PEER_URL;q.onload=res;q.onerror=()=>rej(new Error('x'));document.head.appendChild(q)})}
 function syncP(){net.peers=[...pm.values()];$('pc').style.display='';$('pc').textContent=(net.code?'Pokój '+net.code+' · ':'')+'Gracze: '+(pm.size+1)}
@@ -401,7 +440,7 @@ const kset=(e,v)=>{if(e.code==='KeyW')kw=v;else if(e.code==='KeyA')ka=v;else if(
 addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;if($('shop').classList.contains('on')){if(e.code==='Escape'||e.code==='KeyE'||e.code==='Tab'){e.preventDefault();toggleInv()}return}
  if(e.code==='KeyE'||e.code==='Tab'){e.preventDefault();toggleInv()}
  else if(e.code==='KeyQ'){if($('swap').style.display==='block')$('swap').click()}
- else if(e.code==='KeyG'){if($('tame').style.display==='block')$('tame').click()}else if(e.code==='KeyF'){if($('take').style.display==='block')$('take').click();else $('plant').click()}
+ else if(e.code==='KeyG'){if($('tame').style.display==='block')$('tame').click()}else if(e.code==='KeyF'){if($('carb').style.display==='block')$('carb').click();else if($('take').style.display==='block')$('take').click();else $('plant').click()}
  else kset(e,1)});
 addEventListener('keyup',e=>kset(e,0));
 addEventListener('blur',()=>{kw=ka=ks=kd=0;holding=false});
@@ -410,11 +449,11 @@ c.addEventListener('contextmenu',e=>e.preventDefault());
 $('shop').addEventListener('contextmenu',e=>{e.preventDefault();$('shop').classList.remove('on')});
 addEventListener('mousemove',e=>{if(document.pointerLockElement===c){tY-=e.movementX*.0025;tP=Math.max(-1.1,Math.min(1.1,tP-e.movementY*.0025))}});
 document.addEventListener('pointerlockchange',()=>{if(document.pointerLockElement!==c){holding=false;kw=ka=ks=kd=0}});
-if(matchMedia('(pointer:fine)').matches){const h=document.createElement('div');h.id='hint';h.textContent='WSAD ruch | LPM kop | PPM / E ekwipunek | Q narzędzie | F sadzonka | G oswój';document.body.appendChild(h)}
+if(matchMedia('(pointer:fine)').matches){const h=document.createElement('div');h.id='hint';h.textContent='WSAD ruch | LPM kop | PPM / E ekwipunek | Q narzędzie | F sadzonka/auto | G oswój';document.body.appendChild(h)}
 let last=performance.now(),tk=false;hud();
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;hr=(hr+dt/15)%24;const kk=1-Math.exp(-dt*28);yaw+=(tY-yaw)*kk;pitch+=(tP-pitch)*kk;const kj=1-Math.exp(-dt*10);let ix=jx+(kd-ka),iy=jy+(ks-kw);const il=Math.hypot(ix,iy);if(il>1){ix/=il;iy/=il}sjx+=(ix-sjx)*kj;sjy+=(iy-sjy)*kj;
  const sp=4+P.lv.spd*.6,fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=Math.cos(yaw),rz=-Math.sin(yaw);
- let X=cam.position.x+(fx*-sjy+rx*sjx)*sp*dt,Z=cam.position.z+(fz*-sjy+rz*sjx)*sp*dt;
+ if(inCar)carStep(dt);let X=inCar?car.x:cam.position.x+(fx*-sjy+rx*sjx)*sp*dt,Z=inCar?car.z:cam.position.z+(fz*-sjy+rz*sjx)*sp*dt;
  for(const e of ents){const dx=X-e.x,dz=Z-e.z,d=Math.hypot(dx,dz),m=e.r+.4;if(d<m&&d>0){X=e.x+dx/d*m;Z=e.z+dz/d*m}}
  for(const k of circ){const dx=X-k[0],dz=Z-k[1],d=Math.hypot(dx,dz),m=k[2]+.4;if(d<m&&d>0){X=k[0]+dx/d*m;Z=k[1]+dz/d*m}}
  for(const w of walls){if(w[4]&&py<w[4])continue;const nx=Math.max(w[0],Math.min(X,w[1])),nz=Math.max(w[2],Math.min(Z,w[3])),dx=X-nx,dz=Z-nz,d=Math.hypot(dx,dz);if(d<.4){if(d>0){X=nx+dx/d*.4;Z=nz+dz/d*.4}else X=w[0]-.4}}
@@ -423,15 +462,17 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;hr=(hr+dt/15)
  if(Math.hypot(sjx,sjy)>.1)bob+=dt*10;
  const near=!P.mach&&Math.hypot(X-11.55,Z+6)<2.4;if(near!==tk){tk=near;$('take').style.display=near?'block':'none'}
  const tz_=P.heart>0&&VN?target():null,cn=!!(tz_&&isA(tz_)&&!tz_.tamed);if(cn!==tmv){tmv=cn;$('tame').style.display=cn?'block':'none'}
- const dur=tl==='rainbow'?.1:tl==='mach'||tl==='sword'?.3:tl==='bow'?.5:.38;if(sw>=0){sw+=dt/dur;if(!hitDone&&sw>=.5){hitDone=true;doHit()}if(sw>=1)sw=-1}else if(holding){sw=0;hitDone=false}
+ const nj=!!(P.car&&VN&&jeep.m&&(inCar||Math.hypot(X-car.x,Z-car.z)<4.5));if(nj!==jv||inCar!==jc){jv=nj;jc=inCar;$('carb').style.display=nj?'block':'none';$('carb').textContent=inCar?'Wysiądź':'Wsiądź'}
+ if(jeep.m){const on=DAYF<.45;jeep.spots.forEach(q=>q.intensity=inCar&&on?3:0);jeep.hm.emissiveIntensity=on?3:.4}
+ const dur=tl==='rainbow'?.1:tl==='gun'?.2:tl==='mach'||tl==='sword'?.3:tl==='bow'?.5:.38;if(sw>=0){sw+=dt/dur;if(!hitDone&&sw>=.5){hitDone=true;doHit()}if(sw>=1)sw=-1}else if(holding){sw=0;hitDone=false}
  const s=sw<0?0:Math.sin(Math.min(sw,1)*Math.PI);
- if(tl==='pick'||tl==='rainbow')tg.rotation.set(-.35-s*1.3,.2,.3-s*.1);else if(tl==='bow')tg.rotation.set(0,.1,0);else tg.rotation.set(-.3-s*.6,.1,.5-s*1.0);
- if(tl==='bow')tg.position.set(.35,-.15+Math.sin(bob)*.015,-.7+s*.2);else tg.position.set(.5-s*.1,-.5+Math.sin(bob)*.015-s*.08,-.8-s*.25);
+ if(tl==='pick'||tl==='rainbow')tg.rotation.set(-.35-s*1.3,.2,.3-s*.1);else if(tl==='bow')tg.rotation.set(0,.1,0);else if(tl==='gun')tg.rotation.set(-s*.35,.05,0);else tg.rotation.set(-.3-s*.6,.1,.5-s*1.0);
+ if(tl==='bow')tg.position.set(.35,-.15+Math.sin(bob)*.015,-.7+s*.2);else if(tl==='gun')tg.position.set(.3,-.22+Math.sin(bob)*.012,-.55+s*.1);else tg.position.set(.5-s*.1,-.5+Math.sin(bob)*.015-s*.08,-.8-s*.25);
  for(const e of ents){if(e.t==='tree'&&e.g<1){e.g=Math.min(1,e.g+dt/(18*(1-.06*P.lv.gro)));setS(e)}
   if(e.t==='bush'&&!e.ripe&&(e.tm-=dt)<=0){e.ripe=true;e.bs.visible=true}if(e.t==='tree')e.m.rotation.x=Math.sin(now*.0012+e.x)*.02;if(e.sh>0){e.sh-=dt;e.m.rotation.z=Math.sin(e.sh*60)*e.sh*.8;if(e.sh<=0)e.m.rotation.z=0}}
  for(let i=pa.length-1;i>=0;i--){const p=pa[i];p.vy-=9*dt;p.m.position.x+=p.vx*dt;p.m.position.y+=p.vy*dt;p.m.position.z+=p.vz*dt;if((p.l-=dt)<=0){sc.remove(p.m);p.m.material.dispose();pa.splice(i,1)}}
  for(const a of ans){const dx=a.x-X,dz=a.z-Z,pd=Math.hypot(dx,dz)||1,fear=a.t==='deer'?8:6;let spd=0;
-  if(a.tamed){if(pd>3.5){a.tx=X;a.tz=Z;a.w=0;spd=a.sp*(pd>10?2.4:1.4)}}else if(a.host&&(pd<a.aggr||a.agro>0)){if(a.agro>0)a.agro-=dt;if(pd>1.5){a.tx=X;a.tz=Z;a.w=0;spd=a.sp*1.9}else{a.cd-=dt;if(a.cd<=0&&py<3){a.cd=1.2;hurt(a.dm)}}}
+  if(a.tamed){if(pd>3.5){a.tx=X;a.tz=Z;a.w=0;spd=a.sp*(pd>10?2.4:1.4)}}else if(a.host&&(pd<a.aggr||a.agro>0)){if(a.agro>0)a.agro-=dt;if(pd>1.5){a.tx=X;a.tz=Z;a.w=0;spd=a.sp*1.9}else{a.cd-=dt;if(a.cd<=0&&py<3&&!inCar){a.cd=1.2;hurt(a.dm)}}}
   else if(!a.host&&pd<fear){a.tx=a.x+dx/pd*6;a.tz=a.z+dz/pd*6;a.w=0;spd=a.sp*2.6}
   else if(a.w>0)a.w-=dt;else{if(Math.hypot(a.tx-a.x,a.tz-a.z)<.5){a.w=1+Math.random()*3;const g=Math.random()*6.283,r=3+Math.random()*6;a.tx=a.x+Math.cos(g)*r;a.tz=a.z+Math.sin(g)*r}else spd=a.sp}
   if(spd){const ex=a.tx-a.x,ez=a.tz-a.z,d=Math.hypot(ex,ez)||1,nx=a.x+ex/d*spd*dt,nz=a.z+ez/d*spd*dt;if(okp(nx,nz)){a.x=nx;a.z=nz;a.m.rotation.y=Math.atan2(ex,ez);a.ph+=dt*spd*5}else{a.tx=a.x;a.tz=a.z;a.w=.3}}
@@ -454,7 +495,7 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;hr=(hr+dt/15)
  if(net.on){const seen={};for(const p of net.peers){if(p.isMe||p.kind!=='viewer')continue;const q=p.presence;if(typeof q.x!=='number')continue;seen[p.peer]=1;let a=net.av[p.peer];if(!a){a=net.av[p.peer]=mkAvatar(hs(p.peer)&0xffffff|0x404040);a.tag=tagSprite(q.n||('Gracz '+p.peer.slice(0,4)));a.tag.position.set(0,2.35,0);a.g.add(a.tag);a.x=q.x;a.z=q.z}
   const k=Math.min(1,dt*10),ox=a.x,oz=a.z;a.x+=(q.x-a.x)*k;a.z+=(q.z-a.z)*k;const mv=Math.hypot(a.x-ox,a.z-oz)/Math.max(dt,.001);a.ph+=dt*Math.min(mv,6)*2.2;const w=Math.sin(a.ph)*Math.min(1,mv/3)*.7;a.lg[0].rotation.x=w;a.lg[1].rotation.x=-w;a.ag[0].rotation.x=-w;a.ag[1].rotation.x=w;a.g.rotation.y=(q.y||0)+Math.PI;a.g.position.set(a.x,q.py||0,a.z)}
  for(const id in net.av)if(!seen[id]){sc.remove(net.av[id].g);delete net.av[id]}
- if(now-net.t>100){net.t=now;net.r.presence({x:+cam.position.x.toFixed(2),z:+cam.position.z.toFixed(2),y:+yaw.toFixed(2),py:+py.toFixed(2),n:net.name}).catch(()=>{})}}
+ if(now-net.t>100){net.t=now;net.r.presence({x:+(inCar?car.x:cam.position.x).toFixed(2),z:+(inCar?car.z:cam.position.z).toFixed(2),y:+yaw.toFixed(2),py:+py.toFixed(2),n:net.name}).catch(()=>{})}}
  if(now-evT>1000){evT=now;evTick()}
  if(EV.cur==='rain'){EV.g-=dt;if(EV.g<=0&&gems.length+ents.filter(e=>e.t==='gem').length<45){EV.g=.7;spawnGem()}}
  for(let i=gems.length-1;i>=0;i--){const g=gems[i];g.v+=14*dt;g.m.position.y-=g.v*dt;g.m.rotation.y+=dt*3;if(g.m.position.y<=.4){g.m.position.y=.4;gems.splice(i,1);g.m.rotation.set(0,Math.random()*6,0);ents.push({m:g.m,t:'gem',hp:3,x:g.x,z:g.z,r:.5,g:1});burst(g.x,.5,g.z,0x30e080)}}
@@ -462,6 +503,7 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;hr=(hr+dt/15)
  uT.value=now*.001;T.wave.offset.set(now*.00002,now*.000013);
  for(const q of clouds){q.position.x+=dt*2;if(q.position.x>260)q.position.x=-260}
  for(const q of smk){q.position.y+=dt*.9;q.position.x+=dt*.35;q.scale.x+=dt*.5;q.scale.y=q.scale.x*.5;if(q.position.y>9.5){q.position.set(11.55,5.4,-7.55);q.scale.set(.6,.3,1)}}
+ if(inCar){const fx_=Math.sin(car.h),fz_=Math.cos(car.h);cam.position.set(car.x-fx_*7.5,3.4,car.z-fz_*7.5);cam.lookAt(car.x+fx_*3,1.3,car.z+fz_*3)}
  sky();R.render(sc,cam);requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 </script>
